@@ -22,7 +22,7 @@ def index(request):
         'pub_date': pub_date,
     }
     return render(request, 'twitter/index.html', context)
-
+    
 def detail(request, post_id):
     post = get_object_or_404(Post, pk=post_id)
     return render(request, 'twitter/detail.html', {'post': post})
