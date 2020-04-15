@@ -31,7 +31,7 @@
   <p> No posts are available.</p>
 {% endif %}
 
-<form action="" method="post">
+<form action="getPost" method="post">
   {% csrf_token %}
   {{ form }}
   <input type="submit" value="Submit">

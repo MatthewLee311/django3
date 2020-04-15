@@ -8,7 +8,6 @@ from django.views import generic
 from django.utils import timezone
 from .forms import PostForm
 
-
 # Create your views here.
 
 def index(request):
@@ -16,20 +15,21 @@ def index(request):
     username = Post.username
     pub_date = Post.pub_date
     template = loader.get_template('twitter/index.html')
+    form = PostForm
     context = {
         'latest_post_list': latest_post_list,
         'username': username,
         'pub_date': pub_date,
+        'form': form,
     }
     return render(request, 'twitter/index.html', context)
-    
+
 def detail(request, post_id):
     post = get_object_or_404(Post, pk=post_id)
     return render(request, 'twitter/detail.html', {'post': post})
 
 def get_post(request):
     # if this is a POST request we need to process the form data
-    print("text")
     if request.method == 'POST':
         # create a form instance and populate it with data from the request:
         form = PostForm(request.POST)
@@ -41,13 +41,11 @@ def get_post(request):
             print(request.POST)
             p = Post(username = request.POST['username'], post_text = request.POST['postText'], pub_date = timezone.now())
             p.save()
-            print(p)
             return HttpResponseRedirect('/twitter/')
 
     # if a GET (or any other method) we'll create a blank form
     else:
         form = PostForm()
-    print(form)
     return render(request, 'twitter/index.html', {'form': form})
 
 #def results(request,question_id):
