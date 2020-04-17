@@ -10,6 +10,10 @@ from .forms import PostForm
 
 # Create your views here.
 
+def login(request):
+    HttpResponseRedirect('')
+    return render(request, 'twitter/login.html', context)
+
 def index(request):
     latest_post_list = Post.objects.order_by('-pub_date')[:5]
     username = Post.username
@@ -23,10 +27,6 @@ def index(request):
         'form': form,
     }
     return render(request, 'twitter/index.html', context)
-
-def detail(request, post_id):
-    post = get_object_or_404(Post, pk=post_id)
-    return render(request, 'twitter/detail.html', {'post': post})
 
 def get_post(request):
     # if this is a POST request we need to process the form data
