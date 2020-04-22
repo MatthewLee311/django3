@@ -6,29 +6,30 @@ from .models import Post
 from django.urls import reverse
 from django.views import generic
 from django.utils import timezone
-from .forms import PostForm
+from .forms import PostForm, LoginForm
 from django.contrib.auth import authenticate
 
 # Create your views here.
 
 def login(request):
-
-    enteredUsername = Post.enteredUsername
-    enteredPassword = Post.enteredPassword
     form = LoginForm
     context = {
-        'enteredUsername': enteredUsername,
-        'enteredPassword': enteredPassword,
-        'form': form,
+        'form': form
     }
-    user = authenticate(username= enteredUsername, password= enteredPassword)
-    if user is not None:
-        # A backend authenticated the credentials
-        HttpResponseRedirect('/twitter/')
+    # Get method
+    form = LoginForm(request.GET)
+    if form.is_valid():
+        enteredUsername = enteredUsername
+        enteredPassword = enteredPassword
 
-    else:
-        # No backend authenticated the credentials
-        HttpResponseRedirect('')
+        user = authenticate(username= enteredUsername, password= enteredPassword)
+        if user is not None:
+            # A backend authenticated the credentials
+            HttpResponseRedirect('/twitter/')
+
+        else:
+            # No backend authenticated the credentials
+            HttpResponseRedirect('')
 
     return render(request, 'login.html', context)
 
@@ -65,35 +66,3 @@ def get_post(request):
     else:
         form = PostForm()
     return render(request, 'twitter/index.html', {'form': form})
-
-#def results(request,question_id):
-    #question = get_object_or_404(Post, pk=post_id)
-    #return render(request, 'twitter/results.html', {'post': post})
-
-    # Add input box for new post
-
-# class IndexView(generic.ListView):
-#     template_name = 'twitter/index.html'
-#     context_object_name = 'latest_post_list'
-#
-#     def get_queryset(self):
-#         """
-#         Return the last five published posts (not including those set to be
-#         published in the future).
-#         """
-#         return Post.objects.filter(
-#         pub_date__lte=timezone.now()
-#         ).order_by('-pub_date')[:5]
-
-# class DetailView(generic.DetailView):
-#     model = Post
-#     template_name = 'twitter/detail.html'
-#     def get_queryset(self):
-#         """
-#         Excludes any posts that aren't published yet.
-#         """
-#         return Post.objects.filter(pub_date__lte=timezone.now())
-#
-# class ResultsView(generic.DetailView):
-#     model = Post
-#     template_name = 'twitter/results.html'
