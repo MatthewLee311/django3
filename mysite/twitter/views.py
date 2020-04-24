@@ -7,7 +7,7 @@ from django.urls import reverse
 from django.views import generic
 from django.utils import timezone
 from .forms import PostForm, LoginForm
-from django.contrib.auth import authenticate
+from django.contrib.auth import authenticate, login
 
 # Create your views here.
 
@@ -19,11 +19,10 @@ def login(request):
     # Get method
     form = LoginForm(request.GET)
     if form.is_valid():
-        enteredUsername = enteredUsername
-        enteredPassword = enteredPassword
 
         user = authenticate(username= enteredUsername, password= enteredPassword)
         if user is not None:
+            login(user)
             # A backend authenticated the credentials
             HttpResponseRedirect('/twitter/')
 
@@ -31,7 +30,7 @@ def login(request):
             # No backend authenticated the credentials
             HttpResponseRedirect('')
 
-    return render(request, 'login.html', context)
+    return render(request, 'twitter/login.html', context)
 
 def index(request):
     latest_post_list = Post.objects.order_by('-pub_date')[:5]
