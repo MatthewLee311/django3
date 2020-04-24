@@ -12,14 +12,14 @@ from django.contrib.auth import authenticate, login
 # Create your views here.
 
 def login(request):
-    form = LoginForm
+    form = LoginForm(request.POST)
     context = {
         'form': form
     }
     # Get method
-    form = LoginForm(request.GET)
     if form.is_valid():
-
+        enteredUsername = request.POST['enteredUsername']
+        enteredPassword = request.POST['enteredPassword']
         user = authenticate(username= enteredUsername, password= enteredPassword)
         if user is not None:
             login(user)
