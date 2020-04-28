@@ -11,7 +11,7 @@ from django.contrib.auth import authenticate, login
 
 # Create your views here.
 
-def login(request):
+def userLogin(request):
     form = LoginForm(request.POST)
     context = {
         'form': form
@@ -22,10 +22,9 @@ def login(request):
         enteredPassword = request.POST['enteredPassword']
         user = authenticate(username= enteredUsername, password= enteredPassword)
         if user is not None:
-            login(user)
+            login(request, user)
             # A backend authenticated the credentials
-            HttpResponseRedirect('/twitter/')
-
+            return HttpResponseRedirect('/twitter/')
         else:
             # No backend authenticated the credentials
             HttpResponseRedirect('')
@@ -59,7 +58,7 @@ def get_post(request):
             print(request.POST)
             p = Post(username = request.POST['username'], post_text = request.POST['postText'], pub_date = timezone.now())
             p.save()
-            return HttpResponseRedirect('/twitter/')
+            return HttpResponseRedirect('/twitter/page/')
 
     # if a GET (or any other method) we'll create a blank form
     else:
