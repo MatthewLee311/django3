@@ -13,7 +13,10 @@
 </head>
 <body>
 
+<br>
+<br>
 <h1> Twitter V.67.3 </h1>
+<br>
 
 {% if latest_post_list %}
   <ul>
@@ -31,11 +34,14 @@
   <p> No posts are available.</p>
 {% endif %}
 
+<br>
+
 <form action="getPost" method="post">
   {% csrf_token %}
   {{ form }}
   <input type="submit" value="Submit">
 </form>
+<br>
 
 </body>
 </html>

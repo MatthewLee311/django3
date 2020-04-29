@@ -12,24 +12,32 @@ from django.contrib.auth import authenticate, login
 # Create your views here.
 
 def userLogin(request):
-    form = LoginForm(request.POST)
-    context = {
-        'form': form
-    }
-    # Get method
-    if form.is_valid():
-        enteredUsername = request.POST['enteredUsername']
-        enteredPassword = request.POST['enteredPassword']
-        user = authenticate(username= enteredUsername, password= enteredPassword)
-        if user is not None:
-            login(request, user)
-            # A backend authenticated the credentials
-            return HttpResponseRedirect('/twitter/')
-        else:
-            # No backend authenticated the credentials
-            HttpResponseRedirect('')
+    if request.method == 'GET':
+        form = LoginForm()
+        context = {
+            'form': form
+        }
+        return render(request, 'twitter/login.html', context)
+    if request.method == 'POST':
+        form = LoginForm(request.POST)
+        context = {
+            'form': form
+        }
+        # Get method
+        if form.is_valid():
+            enteredUsername = request.POST['enteredUsername']
+            enteredPassword = request.POST['enteredPassword']
+            global user
+            user = authenticate(username= enteredUsername, password= enteredPassword)
+            if user is not None:
+                login(request, user)
+                # A backend authenticated the credentials
+                return HttpResponseRedirect('/twitter/')
+            else:
+                # No backend authenticated the credentials
+                HttpResponseRedirect('')
 
-    return render(request, 'twitter/login.html', context)
+        return render(request, 'twitter/login.html', context)
 
 def index(request):
     latest_post_list = Post.objects.order_by('-pub_date')[:5]
@@ -55,10 +63,10 @@ def get_post(request):
             # process the data in form.cleaned_data as required
             # ...
             # redirect to a new URL:
-            print(request.POST)
-            p = Post(username = request.POST['username'], post_text = request.POST['postText'], pub_date = timezone.now())
+            print(user)
+            p = Post(username = user.get_username(), post_text = request.POST['postText'], pub_date = timezone.now())
             p.save()
-            return HttpResponseRedirect('/twitter/page/')
+            return HttpResponseRedirect('/twitter/')
 
     # if a GET (or any other method) we'll create a blank form
     else:

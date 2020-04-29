@@ -5,5 +5,5 @@ from . import views
 urlpatterns = [
     path('', views.userLogin),
     path('twitter/', views.index),
-    path('getPost', views.get_post),
+    path('twitter/getPost', views.get_post),
 ]
