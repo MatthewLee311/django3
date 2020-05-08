@@ -1,5 +1,6 @@
 import requests
-URL = 'https://www.espn.com/nfl/'
+from bs4 import BeautifulSoup
+URL = 'https://fftoday.com/stats/players'
 page = requests.get(URL)
-
-print(page)
+soup = BeautifulSoup(page.content, 'html.parser')
+results = soup.find(id='')
