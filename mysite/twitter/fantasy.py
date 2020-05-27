@@ -7,5 +7,6 @@ soup = BeautifulSoup(page.content, 'html.parser')
 results = soup.find()
 player_data = results.find_all(class_='bodycontent')
 for player in player_data:
-    link = re.search("href",str(soup))
+    link = re.search("/stats/players/",str(soup))
     print(link)
+    
