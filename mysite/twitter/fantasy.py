@@ -6,7 +6,7 @@ page = requests.get(URL)
 soup = BeautifulSoup(page.content, 'html.parser')
 results = soup.find()
 player_data = results.find_all(class_='bodycontent')
-playerlinks = re.finditer("/stats/players",str(player_data))
+playerlinks = re.finditer("/stats/players[/a-zA-Z0-9_]+",str(player_data))
 for link in playerlinks:
     if link:
         URL = link.group(0)
